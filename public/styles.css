@@ -89,6 +89,34 @@ h1 {
   line-height: 1.6;
 }
 
+.runtime-status {
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.56);
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.runtime-status.live {
+  color: var(--accent);
+  background: rgba(13, 122, 100, 0.1);
+}
+
+.runtime-status.partial {
+  color: #9b6b00;
+  background: rgba(185, 163, 40, 0.14);
+}
+
+.runtime-status.offline {
+  color: var(--warn);
+  background: rgba(185, 85, 40, 0.12);
+}
+
 .search-panel {
   padding: 28px;
   display: flex;

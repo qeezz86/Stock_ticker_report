@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js",
-    "lint": "node --check server.js && node --check lib/report-service.js && node --check lib/stock-provider.js && node --check lib/dart-client.js && node --check lib/zip-utils.js && node --check public/app.js && node --check test/report-service.test.js && node --check test/stock-provider.test.js",
-    "build": "node --check server.js && node --check lib/report-service.js && node --check lib/stock-provider.js && node --check lib/dart-client.js && node --check lib/zip-utils.js && node --check public/app.js",
+    "dev": "node --env-file-if-exists=.env server.js",
+    "start": "node --env-file-if-exists=.env server.js",
+    "lint": "node --check server.js && node --check lib/report-service.js && node --check lib/stock-provider.js && node --check lib/dart-client.js && node --check lib/zip-utils.js && node --check lib/runtime-status.js && node --check public/app.js && node --check test/report-service.test.js && node --check test/stock-provider.test.js && node --check test/runtime-status.test.js",
+    "build": "node --check server.js && node --check lib/report-service.js && node --check lib/stock-provider.js && node --check lib/dart-client.js && node --check lib/zip-utils.js && node --check lib/runtime-status.js && node --check public/app.js",
     "test": "node --test --test-isolation=none"
   }
 }

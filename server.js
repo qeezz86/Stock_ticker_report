@@ -1,12 +1,19 @@
 import { createServer } from "node:http";
+import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createReportService } from "./lib/report-service.js";
+import { getRuntimeStatus } from "./lib/runtime-status.js";
+
+if (existsSync(".env")) {
+  process.loadEnvFile?.();
+}
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const publicDir = join(__dirname, "public");
 const service = createReportService();
+const runtimeStatus = getRuntimeStatus();
 const PORT = Number(process.env.PORT || 3000);
 
 const CONTENT_TYPES = {
@@ -27,6 +34,10 @@ const server = createServer(async (req, res) => {
       return sendJson(res, 200, { results });
     }
 
+    if (url.pathname === "/api/status" && req.method === "GET") {
+      return sendJson(res, 200, runtimeStatus);
+    }
+
     if (url.pathname.startsWith("/api/report/") && req.method === "GET") {
       const ticker = url.pathname.split("/").pop();
       const report = await service.getReport(ticker);
@@ -44,6 +55,9 @@ const server = createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Stock report app listening on http://localhost:${PORT}`);
+  console.log(
+    `Runtime status: ${runtimeStatus.mode} (DART=${runtimeStatus.sources.dart.ready ? "ready" : "missing"}, KRX=${runtimeStatus.sources.krx.ready ? "ready" : "missing"})`
+  );
 });
 
 async function serveStatic(pathname, res) {

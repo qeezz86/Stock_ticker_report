@@ -1,6 +1,7 @@
 const searchInput = document.querySelector("#ticker-search");
 const searchResults = document.querySelector("#search-results");
 const reportRoot = document.querySelector("#report-root");
+const runtimeStatus = document.querySelector("#runtime-status");
 
 let searchTimer = null;
 
@@ -15,7 +16,29 @@ searchInput.addEventListener("input", () => {
   searchTimer = setTimeout(() => runSearch(query), 180);
 });
 
-runSearch("삼성");
+loadRuntimeStatus();
+
+async function loadRuntimeStatus() {
+  try {
+    const response = await fetch("/api/status");
+    const status = await response.json();
+    renderRuntimeStatus(status);
+  } catch {
+    runtimeStatus.textContent = "상태 확인 실패";
+    runtimeStatus.className = "runtime-status offline";
+  }
+}
+
+function renderRuntimeStatus(status) {
+  const modeLabel =
+    status.mode === "live" ? "실시간 모드" : status.mode === "partial" ? "부분 실시간 모드" : "오프라인 모드";
+  const details = [
+    status.sources?.dart?.ready ? "DART 연결" : "DART 미연결",
+    status.sources?.krx?.ready ? "KRX 연결" : "KRX 미연결"
+  ].join(" · ");
+  runtimeStatus.textContent = `${modeLabel} · ${details}`;
+  runtimeStatus.className = `runtime-status ${status.mode}`;
+}
 
 async function runSearch(query) {
   const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
@@ -72,7 +95,13 @@ function renderReport(report) {
             <div class="ticker-meta">
               ${report.company.market ? `<span class="pill">${report.company.market}</span>` : ""}
               ${report.company.industryName ? `<span class="pill">${report.company.industryName}</span>` : ""}
-              ${report.company.changePercent == null ? "" : `<span class="pill ${report.company.changePercent >= 0 ? "up" : "down"}">${formatSigned(report.company.changePercent)}%</span>`}
+              ${
+                report.company.changePercent == null
+                  ? ""
+                  : `<span class="pill ${report.company.changePercent >= 0 ? "up" : "down"}">${formatSigned(
+                      report.company.changePercent
+                    )}%</span>`
+              }
             </div>
           </div>
           <div class="kpi">
