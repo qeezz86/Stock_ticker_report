@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KR Stock Report</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Korea Equity Briefing</p>
+          <h1>한국 주식 종목 보고서</h1>
+          <p class="hero-copy">
+            종목을 검색하면 핵심 재무, 밸류에이션, 산업 성장성, 차트, 수급 흐름을 한 화면에서 정리합니다.
+          </p>
+        </div>
+        <div class="search-panel">
+          <label for="ticker-search">종목 검색</label>
+          <input id="ticker-search" type="search" placeholder="예: 삼성전자, 005930, NAVER" autocomplete="off" />
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </header>
+
+      <main id="report-root" class="report-root">
+        <section class="empty-state">
+          <h2>종목을 선택하면 보고서가 생성됩니다.</h2>
+          <p>기본 데이터셋에는 삼성전자, SK하이닉스, NAVER가 포함되어 있습니다.</p>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
